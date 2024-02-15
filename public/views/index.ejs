@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>Index</title>
+        <link rel="stylesheet" href="/public/resources/index.css" />
+    </head>
+    <body>
+
+          
+        <div class="header">
+
+            <div class="options">
+                <button>Login</button>
+                
+                <div class="dropdown">
+                    
+                    <button class="dropbtn">
+                        <div class="icon-cart" style="float: left">
+                            <div class="cart-line-1" style="background-color: #E5E9EA"></div>
+                            <div class="cart-line-2" style="background-color: #E5E9EA"></div>
+                            <div class="cart-line-3" style="background-color: #E5E9EA"></div>
+                            <div class="cart-wheel" style="background-color: #E5E9EA"></div>
+                        </div>
+                    </button>
+                        <div class="dropdown-content">
+                        <% Object.keys(cart).forEach((item) => { %>
+                            <a href="#">
+                                <b><%=item%></b><br>x<%=cart[item]%>
+                            </a>
+                        <% }) %>
+                    </div>
+                </div>
+            
+            </div>
+
+        </div>
+        <h1> Welcome to our virtual store</h1>
+        
+        
+        <div class="product-container">
+            <div class="product-block">
+                <h3>QR</h3>
+                <h4>50 tickets</h4>
+                <p>
+                    Service that secures your party against partycrashers delivering individual QR Codes for entrance identification. Surely a must have!
+                </p>
+                <button onclick="add('QR')">+ ADD</button>
+            </div>
+            <div class="product-block">
+                <h3>RSVP</h3>
+                <h4>50 tickets</h4>
+                <p>
+                    Service of contacting your guests throught phone calls or your favorite messaging app, including media messages as photo or video.
+                </p>
+                <button onclick="add('RSVP')">+ ADD</button>
+            </div>
+            <div class="product-block">
+                <h3>STD</h3>
+                <h4>50 tickets</h4>
+                <p>
+                    Service of sending Save the Dates messages throught your favorite messaging app, including media messages as photo or video.
+                </p>
+                <button onclick="add('STD')">+ ADD</button>
+            </div>
+        </div>
+
+    </body>
+</html>
+<script src="/public/resources/index.js"></script>

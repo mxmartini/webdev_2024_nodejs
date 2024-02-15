@@ -1,0 +1,11 @@
+GET http://localhost:3001
+
+###
+
+POST http://localhost:3001/guests
+Content-Type: application/json
+
+{ 
+    "name" : "Max", 
+    "age" : "45" 
+}
