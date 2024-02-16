@@ -50,8 +50,9 @@ display: block;
 .dropdown .dropdown-content a { border: 1px solid #999; margin-top: -1px; }
 .dropdown .dropdown-content a:first-child { border-top-left-radius: 5px; border-top-right-radius: 5px; }
 .dropdown .dropdown-content a:last-child { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+.dropdown .dropdown-content a:last-child { text-align: center; background-color: teal; color: #fff; }
 
-.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content a:hover { background-color: #f1f1f1; }
 
 .dropdown:hover .dropdown-content {
 display: block;

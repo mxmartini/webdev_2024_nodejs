@@ -23,6 +23,7 @@ const indexRoute = require("./public/routes/index.route")
 const loginRoute = require("./public/routes/login.route")
 const logoutRoute = require("./public/routes/logout.route")
 const homeRoute = require("./public/routes/home.route")
+const orderRoute = require("./public/routes/order.route")
 const guestsRoute = require("./public/routes/guests.route")
 
 // ROUTES
@@ -37,6 +38,7 @@ app.use("/", indexRoute);
 app.use("/login", loginRoute);
 app.use("/logout", logoutRoute);
 app.use("/home", homeRoute);
+app.use("/order", orderRoute);
 app.use("/guests", guestsRoute);
 
 app.listen(3001);

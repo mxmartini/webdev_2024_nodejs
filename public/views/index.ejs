@@ -18,11 +18,12 @@
                         <i class="fa fa-shopping-cart"></i>
                     </button>
                         <div class="dropdown-content">
-                        <% Object.keys(cart).forEach((item) => { %>
+                        <% for (item in cart) { %>
                             <a href="#">
                                 <b><%=item%></b><br>x<%=cart[item]%>
                             </a>
-                        <% }) %>
+                        <% } %>
+                        <a href="#" onclick="window.open('/order', '_self')">Make order</a>
                     </div>
                 </div>
             

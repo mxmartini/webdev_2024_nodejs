@@ -6,7 +6,7 @@ router.get("/", (req, res) => {
         agg[item] += 50;
         return agg;
     }, { "QR": 0, "RSVP": 0, "STD": 0 });
-    
+
     res.render("index", { cart : groupedCart });
 });
 

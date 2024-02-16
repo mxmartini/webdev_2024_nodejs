@@ -5,7 +5,7 @@ router.get("/", (req, res) => {
     if(!req.session.user)
         return res.redirect("/login");
 
-    res.render("home.ejs");
+    res.render("order.ejs");
 });
 
 module.exports = router;
