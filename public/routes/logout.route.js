@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { readFile } = require('fs');
 
 router.get("/", (req, res) => {
 
-    //
+    req.session.destroy();
+    res.redirect("/");
 });
 
 module.exports = router;

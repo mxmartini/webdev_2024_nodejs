@@ -1,0 +1,7 @@
+
+.product-container { display: flex; align-items: center; justify-content: center; flex-wrap: wrap;}
+.product-block { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 350px; height: 290px; border: 1px solid #333; border-radius: 5px; padding: 20px; margin: 20px; }
+.product-block h3 { color: teal; }
+.product-block h4 { margin: 0; padding: 0; }
+.product-block button { margin-top: auto; width: 150px; height: 40px; }
+

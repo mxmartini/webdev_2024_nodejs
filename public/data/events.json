@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Pool party",
+    "date": "2023-03-15",
+    "active": true,
+    "user_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Bday Party",
+    "date": "2024-02-28",
+    "active": true,
+    "user_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Wedding Party",
+    "date": "2024-02-27",
+    "active": true,
+    "user_id": 1
+  },
+  {
+    "id": 4,
+    "name": "Fulano de Tal",
+    "date": "2024-02-20",
+    "active": true,
+    "user_id": 1
+  }
+]

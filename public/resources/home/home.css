@@ -1,4 +1,24 @@
+/* Table of data */
+#events {
+  border: 1px solid #333; 
+  border-radius: 5px;
+  margin: 20px 0;
+  border-spacing: 0px;
+}
+#events td, 
+#events th {
+  border: 1px solid #333; 
+  padding: 10px 20px;
+}
+#events th {
+  background-color: yellow; 
+  padding: 10px 20px;
+}
+#events th:first-child { min-width: 200px; }
+#events th:nth-child(2) { min-width: 100px; }
+
 h1 { color: teal; }
+.event-container { margin: 21; }
 
 /* The Modal (background) */
 .modal {

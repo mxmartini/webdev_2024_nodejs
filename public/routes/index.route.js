@@ -2,12 +2,7 @@ const router = require('express').Router();
 
 router.get("/", (req, res) => {
 
-    const groupedCart = req.session.cart.reduce((agg, item) => {
-        agg[item] += 50;
-        return agg;
-    }, { "QR": 0, "RSVP": 0, "STD": 0 });
-
-    res.render("index", { cart : groupedCart });
+    res.render("index");
 });
 
 router.get("/add", (req, res) => {

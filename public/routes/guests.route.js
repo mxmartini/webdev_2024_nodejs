@@ -3,7 +3,7 @@ const { readFile, writeFile } = require('fs');
 
 router.get("/", (req, res) => {
 
-    readFile('./public/guests.json', 'utf-8', (err, json) => res.send(json));
+    readFile('./public/data/guests.json', 'utf-8', (err, json) => res.send(json));
 });
 
 router.post("/", (req, res) => {
@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
 
     // VALIDACOES (A FAZER)
     
-    readFile('./public/guests.json', 'utf-8', (err, data) => {
+    readFile('./public/data/guests.json', 'utf-8', (err, data) => {
 
         let json = JSON.parse(data);
         

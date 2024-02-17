@@ -1,17 +1,33 @@
 <html>
     <head>
-        <title>Hello</title>
-        <link rel="stylesheet" href="/public/resources/home.css" />
+        <title>Events</title>
+        <link rel="stylesheet" href="/public/resources/home/home.css" />
+        <link rel="stylesheet" href="/public/resources/dropdown.css" />
     </head>
     <body>
-        <h1>Hello Guests</h1>
-        <p>
-            welcome guests!
-        </p>
-        <ul id="guests"></ul>
-        
-        <button id="register">Register</button>
 
+        <%- include('includes/header.ejs') -%>
+
+        <h1>Events</h1>
+
+        <div class="event-container">
+
+            <table id="events">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Active</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>  
+        
+            <button id="register">Register</button>
+
+        </div>
+        
         <!-- The Modal -->
         <div id="modal" class="modal">
 
@@ -22,13 +38,16 @@
                 
                 <form id="form">
                     <fieldset>
-                    <legend>Register Guest</legend>
+                    <legend>Register Event</legend>
                         
                         <label for="name">Name:</label><br>
-                        <input type="text" id="name" name="name" value=""><br>
+                        <input type="text" id="name" name="name" value=""><br><br>
                         
-                        <label for="age">Age:</label><br>
-                        <input type="number" id="age" name="age" value=""><br>
+                        <label for="age">Date:</label><br>
+                        <input type="date" id="date" name="date" value=""><br><br>
+                        
+                        <label for="active">Active:</label><br>
+                        <input type="checkbox" id="active" name="active" value=""><br><br>
 
                         <input type="submit" id="create" value="Create">
                     </fieldset>
@@ -41,4 +60,4 @@
     
     </body>
 </html>
-<script src="/public/resources/home.js"></script>
+<script src="/public/resources/home/home.js" type="module"></script>
