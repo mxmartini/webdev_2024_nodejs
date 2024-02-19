@@ -92,9 +92,8 @@ export class FormModel {
         return data;
     }
 
-    // send(method){ throw new Error("Not implemented. Must be overrided in a child class.") }
-    // send(url, method){ throw new Error("Not implemented. Must be overrided in a child class.") }
-
+    send(e, options){throw new Error("Not implemented. Must be overrided in a child class.") }
+    
     clear() {
         [...this.inputs].forEach(input => {
             const inputTag = (input.tagName+(input.tagName.toLowerCase()=='input'?input.type:'')).toLowerCase(); 
