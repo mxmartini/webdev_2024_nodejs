@@ -4,33 +4,46 @@ import '/public/components/Functions.js';
 
 export class TableModel {
     #table;
-    constructor(table, options) {
+    #filterListeners = [];
+    constructor(target, options) {
         
         if (this.instanceOf(new.target)) throw new TypeError("Cannot instantiate because it is Abstract");
         
-        this.#table = typeof table === 'string' ? document.querySelector(table) : table;
+        this.#table = typeof target === 'string' ? document.querySelector(target) : target;
 
-        const [ head, ...rows] = this.#table?.querySelectorAll("tr") || document.querySelectorAll("empty"); 
-        this.columns = options?.columns || [];
+        const [ head, ...rows ] = this.#table?.rows;
         this.head = head;
         this.rows = rows;
+        
+        this.options = {
+            url : options?.url || "",
+            method : options?.method || "GET",
+            headers : options?.headers || undefined,
+            uid : options?.uid || "id",
+            filter : options?.filter || undefined,
+            columns : options?.columns || [],
+        }
     }
 
-    add(data) { 
-        const tr = document.createElement("tr");
+    #bindColumns(data, tr){
+
         let td = null;
-        for (const prop in this.columns){
-            td = document.createElement('td')
-            switch(typeof this.columns[prop]) {
+        for (const prop in this.options.columns){
+            td = document.createElement('td');
+            switch(typeof this.options.columns[prop]) {
             
                 case 'string':
-                    td.innerHTML = data[this.columns[prop]]
+                    td.innerHTML = data[this.options.columns[prop]]
                     tr.appendChild(td);
                     continue;
             
                 case 'object':
-                    const { html, style } = this.columns[prop];
-                    if(html) td.innerHTML = typeof html === 'function' ? html(data) : html
+                    const { html, style } = this.options.columns[prop];
+                    if(html) { 
+                        const dom = typeof html === 'function' ? html(data) : html;
+                        if(typeof dom === 'string') td.innerHTML = dom;
+                        else td.appendChild(dom);
+                    }
                     if(style) { 
                         const styleSelectors = typeof html === 'function' ? style(data) : style;
                         for (const selector in styleSelectors) td.style[selector] = styleSelectors[selector];
@@ -44,33 +57,111 @@ export class TableModel {
                     continue;
             }
         }
+    }
+
+    add(data) {
+        const tr = document.createElement("tr");
+        tr.setAttribute("uid", data[this.options.uid])
+        
+        this.#bindColumns(data, tr);
+        
         this.#table.appendChild(tr);
+    }
+    
+    update(data){
+        
+        const tr = this.#table.rows.querySelector(`[uid='${data[this.options.uid]}']`);
+        tr.innerHTML = "";
+        this.#bindColumns(data, tr);
+    }
+
+    remove(data){
+        
+        const row = this.#table.rows.querySelector(`[uid='${data[this.options.uid]}']`);
+        row.remove();
+    }
+
+    load(options, callback=null){
+        
+        if(arguments.length == 1) callback = options;
+
+        const { url, method, ...otherOptions } = { ...this.options, ...options };
+        const init = {
+            method: method || "GET",
+            ...otherOptions
+        }; 
+        const filter = Object.keys(otherOptions.filter).length > 0 ? '?' + new URLSearchParams(otherOptions.filter).toString() : "";
+            
+        fetch(url+filter, init)
+        .then( (res)=> { if (!res.ok) return res.text().then((t) => { throw new Error(t); }); return res.json() })
+        .then( (events) => {
+            events.forEach(event => this.add(event));
+            callback?.(new LoadEvent(this, events, undefined)) 
+        })
+        .catch( (err) => callback?.(new LoadEvent(this, undefined, err)) );
+
+        return false;
+    }
+
+    addLoadEventTrigger(target, event, options=null, callback=null) {
+        const element = typeof target == 'string' ? document.querySelector(target) : target;
+        if(element) {
+
+            element[event] = (e) => { return this.load(options, callback); }
+            this.#filterListeners.push({ element, event });
+        }
     }
 }
 
 export class EventTable extends TableModel {
     
-    constructor(tableSelector, options) {
-        super(tableSelector, options || { 
+    constructor(target, options) {
+        super(target, options || { 
+            url: 'http://localhost:3001/events',
+            method: "GET",
+            headers: { "Content-Type" : "application/json" },
+            uid: "id",
+            filter: {},
             columns : [ 
                 "name", 
                 { html: (data) => new Date(data.date).toLocaleString("en-US", { dateStyle: "short" }) }, 
                 { html: (data) => data.active ? "&#10004;" : "&#10008;", style: (data) => data.active ? { color: "green" } : { color: "red" } }, 
-                { html: (data) => 
+                { html: (data) => {
+                    const dom = 
                     `<div class="dropdown">
                         <button class="dropbtn">&#65049;</button>
                             <div class="dropdown-content">
-                                <a href="#" onclick="">Edit</a>
-                                <a href="#" onclick="">Remove</a>
-                                <a href="#" onclick="window.open('/guests/${btoa(data.id)}', '_self')">View Guests</a>
+                                <a href="#">Edit</a>
+                                <a href="#">Remove</a>
+                                <a href="#">View Guests</a>
                         </div>
-                    </div>` 
-                } 
+                    </div>`.toDOM();
+                    const edit = dom.querySelector(".dropdown-content a:nth-child(1)");
+                    const remove = dom.querySelector(".dropdown-content a:nth-child(2)");
+                    const guests = dom.querySelector(".dropdown-content a:nth-child(3)");
+                    edit.onclick = (e) => { this.onEdit(new TableEditEvent(this, data)) };
+                    remove.onclick = (e) => { this.onRemove(new TableRemoveEvent(this, data)) };
+                    guests.onclick = (e) => { this.onGuests(new TableGuestsEvent(this, data)) };
+                    return dom; 
+                }} 
             ] 
         });
     }
 
+    onEdit(e){}
+    onRemove(e){}
+    onGuests(e){}
 }
+
+class GenericEvent {
+    constructor(target, data) {
+        this.target = target;
+        this.data = data;
+    }
+}
+class TableEditEvent extends GenericEvent {}
+class TableRemoveEvent extends GenericEvent {}
+class TableGuestsEvent extends GenericEvent {}
 
 export class FormModel {
     #form
@@ -92,7 +183,7 @@ export class FormModel {
         return data;
     }
 
-    send(e, options){throw new Error("Not implemented. Must be overrided in a child class.") }
+    send(options){throw new Error("Not implemented. Must be overrided in a child class.") }
     
     clear() {
         [...this.inputs].forEach(input => {
@@ -105,6 +196,10 @@ export class FormModel {
                 case 'select': input.selectedIndex = 0; break;
             }
         });
+    }
+
+    find(selector){
+        return this.inputs.querySelector(selector);
     }
 }
 
@@ -119,11 +214,11 @@ export class EventForm extends FormModel {
         };
     }
 
-    send(e, options){
+    send(options, callback){
+        
+        if(arguments.length == 1) callback = options;
 
-        e.preventDefault();
-
-        const { url, method, body, ...otherOptions } = { ...options, ...this.options };
+        const { url, method, body, ...otherOptions } = { ...this.options, ...options };
         const init = {
             method: method || "POST",
             ...otherOptions,
@@ -131,17 +226,28 @@ export class EventForm extends FormModel {
         }; 
         
         fetch(url, init)
-        .then( (res)=> res.json() )
-        .then( (event) => options.success?.(event))
-        .catch( (err) => options.error?.(err) );
+        .then( (res)=> { if (!res.ok) return res.text().then((t) => { throw new Error(t); }); return res.json() })
+        .then( (event) => callback?.(new SendEvent(this, event, undefined)))
+        .catch( (err) => callback?.(new SendEvent(this, undefined, err)))
+
+        return init?.preventSubmit == false;
     }
 
-    addSendEventTrigger(target, event, options) {
+    addSendEventTrigger(target, event, options=null, callback=null) {
         const element = typeof target == 'string' ? document.querySelector(target) : target;
         if(element) {
 
-            element[event] = (e) => { this.send(e, options); }
+            element[event] = (e) => { return this.send(options, callback); }
             this.#sendListeners.push({ element, event });
         }
     }
 }
+
+class ResultEvent extends GenericEvent {
+    constructor(target, data, error){
+        super(target, data);
+        this.error = error;
+    }
+}
+class LoadEvent extends ResultEvent {}
+class SendEvent extends ResultEvent {}
