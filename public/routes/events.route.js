@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
                 if (name && !e.name.toLowerCase().includes(name.toLowerCase())) return false;
                 if (dateini && dateend && !(e.date >= dateini && e.date <= dateend)) return false;
                 if (dateini && !e.date >= dateini) return false;
-                if (dateend && !e.date <= dateend) return false; console.log(e.active !== active); console.log(typeof active)
+                if (dateend && !e.date <= dateend) return false; console.log(e.active !== active);
                 if (typeof active !== 'undefined' && e.active !== (active?.toLowerCase?.() === 'true')) return false;
                 return true;
             });
