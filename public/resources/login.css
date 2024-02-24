@@ -1,0 +1,15 @@
+@import url('/public/resources/theme.css');
+
+fieldset {
+    width: 30%;
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 5px;
+}
+fieldset label { margin: 10px; margin-bottom: 0; }
+fieldset input { margin: 10px; }

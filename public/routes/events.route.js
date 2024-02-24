@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { readFileSync, writeFileSync } = require('fs');
-const { randomUUID } = require('crypto');
 
 router.get("/", (req, res) => {
 
@@ -9,8 +8,13 @@ router.get("/", (req, res) => {
         let events = JSON.parse(data);
         
         if(req.query)
-            events = events.filter((e) => { 
-                for (param in req.query) if (!e[param].includes(req.query[param])) return false;
+            events = events.filter( e => { 
+                const { name, dateini, dateend, active } = req.query; 
+                if (name && !e.name.toLowerCase().includes(name.toLowerCase())) return false;
+                if (dateini && dateend && !(e.date >= dateini && e.date <= dateend)) return false;
+                if (dateini && !e.date >= dateini) return false;
+                if (dateend && !e.date <= dateend) return false; console.log(e.active !== active); console.log(typeof active)
+                if (typeof active !== 'undefined' && e.active !== (active?.toLowerCase?.() === 'true')) return false;
                 return true;
             });
         

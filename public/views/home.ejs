@@ -8,9 +8,42 @@
 
         <%- include('includes/header.ejs') -%>
 
-        <h1>Events</h1>
-
         <div class="event-container">
+
+            <h1>Events</h1>
+
+            <div id="filters">
+                <fieldset>
+                    <legend>Event search</legend>
+                    <div class="row">
+                        <div>
+                            <label for="src_name">Name:</label><br>
+                            <input type="text" id="src_name" name="src_name" value="">
+                        </div>
+                        <div>
+                            <label for="src_date">Initial date:</label><br>
+                            <input type="date" id="src_date_ini" name="src_date_ini" value="">
+                        </div>
+                        <div>
+                            <label for="src_date">End date:</label><br>
+                            <input type="date" id="src_date_end" name="src_date_end" value="">
+                        </div>
+                        <div>
+                            <label for="src_active">Is active?</label><br>
+                            <select id="src_active" name="src_active">
+                                <option value="">...</option>
+                                <option value="y">Yes</option>
+                                <option value="n">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button id="btnsearch" class="btn-primary"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button id="register" class="btn-primary"><i class="fa fa-plus"></i> Register</button>
 
             <table id="events">
                 <thead>
@@ -24,8 +57,6 @@
                 <tbody></tbody>
             </table>  
         
-            <button id="register">Register</button>
-
         </div>
         
         <!-- The Modal -->
@@ -49,7 +80,7 @@
                         <label for="active">Active:</label><br>
                         <input type="checkbox" id="active" name="active" value=""><br><br>
 
-                        <input type="submit" id="save" value="Save">
+                        <input type="submit" id="save" value="Save" class="btn-primary">
                     </fieldset>
                 </form> 
                 

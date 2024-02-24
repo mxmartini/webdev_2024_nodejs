@@ -19,5 +19,12 @@
     "date": "2024-02-27",
     "active": true,
     "user_id": 1
+  },
+  {
+    "id": 5,
+    "name": "Max's Party",
+    "date": "2024-04-23",
+    "active": true,
+    "user_id": 1
   }
 ]

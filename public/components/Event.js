@@ -2,6 +2,54 @@
 
 import '/public/components/Functions.js';
 
+export class FilterModel {
+    #container;
+    #filterListeners = [];
+    constructor(target, options){
+
+        if (this.instanceOf(new.target)) throw new TypeError("Cannot instantiate because it is Abstract");
+        
+        this.#container = typeof target === 'string' ? document.querySelector(target) : target;
+        this.inputs = this.#container.querySelectorAll("input:not([type=button]):not([type=submit]), select, textarea");
+    }
+    find(selector){
+        return this.inputs.querySelector(selector);
+    }
+    filter(options, callback){ 
+        
+        if(!callback && typeof options === 'function') callback = options;
+        
+        callback?.(new FilterEvent(this, Array.from(this.inputs).reduce((data, input) => {
+            const inputTag = (input.tagName+(input.tagName.toLowerCase()=='input'?input.type:'')).toLowerCase(); 
+            switch(inputTag) { 
+                case 'inputtext':
+                case 'inputdate': 
+                case 'textarea': data[input.name] = input.value; break;
+                case 'inputcheckbox': data[input.name] = input.checked; break;
+                case 'select': data[input.name] = input.value; break;
+            }
+            return data;
+        }, {})))
+        
+        return false;
+    }
+    addFilterEventTrigger(target, event, options=null, callback=null) {
+        const element = typeof target == 'string' ? document.querySelector(target) : target;
+        if(element) {
+
+            element[event] = (e) => { return this.filter(options, callback); }
+            this.#filterListeners.push({ element, event });
+        }
+    }
+}
+
+export class EventFilter extends FilterModel {
+    constructor(target, options) {
+        super(target, options || {  });
+    }
+}
+
+
 export class TableModel {
     #table;
     #filterListeners = [];
@@ -11,10 +59,6 @@ export class TableModel {
         
         this.#table = typeof target === 'string' ? document.querySelector(target) : target;
 
-        const [ head, ...rows ] = this.#table?.rows;
-        this.head = head;
-        this.rows = rows;
-        
         this.options = {
             url : options?.url || "",
             method : options?.method || "GET",
@@ -24,7 +68,7 @@ export class TableModel {
             columns : options?.columns || [],
         }
     }
-
+    
     #bindColumns(data, tr){
 
         let td = null;
@@ -81,9 +125,15 @@ export class TableModel {
         row.remove();
     }
 
+    clear(){
+        
+        const [ head, ...rows ] = this.#table.rows;
+        Array.from(rows).findLast((row) => row.remove());
+    }
+
     load(options, callback=null){
         
-        if(arguments.length == 1) callback = options;
+        if(!callback && typeof options === 'function') callback = options;
 
         const { url, method, ...otherOptions } = { ...this.options, ...options };
         const init = {
@@ -130,7 +180,7 @@ export class EventTable extends TableModel {
                     const dom = 
                     `<div class="dropdown">
                         <button class="dropbtn">&#65049;</button>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="right: 0;">
                                 <a href="#">Edit</a>
                                 <a href="#">Remove</a>
                                 <a href="#">View Guests</a>
@@ -159,6 +209,7 @@ class GenericEvent {
         this.data = data;
     }
 }
+class FilterEvent extends GenericEvent {}
 class TableEditEvent extends GenericEvent {}
 class TableRemoveEvent extends GenericEvent {}
 class TableGuestsEvent extends GenericEvent {}
@@ -216,7 +267,7 @@ export class EventForm extends FormModel {
 
     send(options, callback){
         
-        if(arguments.length == 1) callback = options;
+        if(!callback && typeof options === 'function') callback = options;
 
         const { url, method, body, ...otherOptions } = { ...this.options, ...options };
         const init = {

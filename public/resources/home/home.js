@@ -1,14 +1,24 @@
 import { Modal } from '/public/components/Modal.js';
-import { EventTable, EventForm } from '/public/components/Event.js';
+import { EventFilter, EventTable, EventForm } from '/public/components/Event.js';
 
 const modal = new Modal('#modal');
 
+const filter = new EventFilter('#filters');
 const table = new EventTable('#events');
 const form = new EventForm('#form');
 
 onload = (e) => {
 
-    table.load(({ error }) => error && console.warn(error) );
+    filter.addFilterEventTrigger('#btnsearch', 'onclick', ({ data : search }) => {
+        let filter = { };
+        if (search.src_name !== '') filter.name = search.src_name;
+        if (search.src_date_ini !== '') filter.dateini = search.src_date_ini;
+        if (search.src_date_end !== '') filter.dateend = search.src_date_end;
+        if (search.src_active !== '') filter.active = search.src_active === 'y';
+        console.log(filter);
+        table.clear();
+        table.load({ filter : filter }, ({ error }) => error && console.warn(error) );
+    });
 }
 
 modal.addOpenEventTrigger("#register", 'onclick', (e) => {

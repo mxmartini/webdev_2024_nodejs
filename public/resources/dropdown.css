@@ -2,7 +2,6 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    margin-right: 10;
 }
     
 .dropbtn {
@@ -18,7 +17,7 @@
     display: none;
     position: absolute;
     right: auto;
-    left: 0;
+    /* left: 0; */
     background-color: #f9f9f9;
     border-radius: 5px;
     min-width: 160px;
