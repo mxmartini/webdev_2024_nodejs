@@ -15,7 +15,7 @@ onload = (e) => {
         if (search.src_date_ini !== '') filter.dateini = search.src_date_ini;
         if (search.src_date_end !== '') filter.dateend = search.src_date_end;
         if (search.src_active !== '') filter.active = search.src_active === 'y';
-        console.log(filter);
+        
         table.clear();
         table.load({ filter : filter }, ({ error }) => error && console.warn(error) );
     });

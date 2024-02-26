@@ -26,5 +26,12 @@
     "date": "2024-04-23",
     "active": true,
     "user_id": 1
+  },
+  {
+    "id": 6,
+    "name": "Sandros' Birthday",
+    "date": "2025-01-01",
+    "active": true,
+    "user_id": 1
   }
 ]

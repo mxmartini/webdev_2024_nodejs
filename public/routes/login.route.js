@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { readFileSync } = require('fs');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 router.get("/", (req, res) => {
 
@@ -12,7 +14,10 @@ router.post("/", (req, res) => {
     
     const data = readFileSync('./public/data/users.json', 'utf-8');
     const users = JSON.parse(data);
-    const user = users.find((u) => u.email === email && u.password === password);
+    //const user = users.find((u) => u.email === email && bcrypt.compare(password, u.password));
+    const salt = process.env.PASSWORD_SALT;
+    const cpassword = crypto.createHash('sha256').update(password+salt).digest("hex");
+    const user = users.find((u) => u.email === email && u.password === cpassword);
 
     if(!user) 
         return res.redirect("/login");

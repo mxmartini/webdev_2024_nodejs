@@ -8,11 +8,18 @@
     "dev": "nodemon index.js"
   },
   "nodemonConfig": {
-    "ignore": ["public/resources/*", "public/components/*", "public/data/*", "README.md"]
+    "ignore": [
+      "public/resources/*",
+      "public/components/*",
+      "public/data/*",
+      "README.md"
+    ]
   },
   "author": "Max Martini",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.4",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
