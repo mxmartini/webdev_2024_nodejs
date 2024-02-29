@@ -3,6 +3,6 @@
     "id" : 1, 
     "name": "Administrator",
     "email": "admin@mail.com",
-    "password" : "68d820783c3a293e38db60f3cc67b5454642d8327e7292e2de133c6fb61115e1"
+    "password" : "$2b$10$dPuU4tAE8pFYQ8BgzL2lz.9hDD.Oaz2ZkZzu91ZN/hLAqagf5e.BW"
   }
 ]

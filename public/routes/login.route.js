@@ -2,13 +2,19 @@ const router = require('express').Router();
 const { readFileSync } = require('fs');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const passport = require('passport');
 
 router.get("/", (req, res) => {
-
+    
     res.render("login.ejs");
 });
 
-router.post("/", (req, res) => {
+router.post("/", passport.authenticate('local', { 
+    successRedirect: "/home",
+    failureRedirect: "/login"
+ }));
+
+router.post("/old", (req, res) => {
 
     const { email, password } = req.body;
     

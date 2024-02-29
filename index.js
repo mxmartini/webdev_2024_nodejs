@@ -2,6 +2,23 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const app = express();
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const usersController = require('./public/controllers/users.controller');
+
+passport.use(new LocalStrategy({ usernameField: "email", passwordField: "password" }, (email, password, done) => { 
+    
+    const user = usersController.findByEmailAndPassword(email, password)
+    if(user)
+        done(null, user);
+    else
+        done(null, false, { error : "Invalid user/password combination." })
+
+}));
+passport.serializeUser((user, done) => { done(null, user.id) });
+passport.deserializeUser((id, done) => { 
+    done(null, usersController.findOne(id) ) 
+});
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -9,7 +26,9 @@ app.use(session({
     saveUninitialized: false,
     rolling: true, //session renew in each request
     cookie: { maxAge: process.env.SESSION_TIMEOUT*1000*60 }
-  }));
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/public", express.static(__dirname + "/public"));
 
@@ -33,15 +52,13 @@ app.all(["/*"], (req, res, next) => {
     if(!req.session.cart)
         req.session.cart = [];
 
-    if(!req.session.user)
-        req.session.user = null;
-
     req.session.groupedCart =  req.session.cart.reduce((agg, item) => {
         agg[item] += 50;
         return agg;
     }, { "QR": 0, "RSVP": 0, "STD": 0 });
 
     res.locals = req.session;
+    res.locals.user = req.user;
 
     next();
 });
