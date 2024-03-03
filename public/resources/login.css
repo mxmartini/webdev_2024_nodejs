@@ -13,3 +13,4 @@ fieldset {
 }
 fieldset label { margin: 10px; margin-bottom: 0; }
 fieldset input { margin: 10px; }
+fieldset .error { color: red; margin: 0 10px; }
