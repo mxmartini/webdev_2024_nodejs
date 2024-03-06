@@ -15,7 +15,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(flash())
+app.use(flash());
 
 app.use("/public", express.static(__dirname + "/public"));
 
@@ -50,7 +50,7 @@ app.all(["/*"], (req, res, next) => {
     const { cookie, ...sessionVars } = req.session;
     res.locals = sessionVars;
     res.locals.user = req.user;
-    res.locals.messages = req.session.messages ? req.session.messages.slice(-1) : "";
+    //res.locals.messages = req.session.messages ? req.session.messages.slice(-1) : "";
 
     next();
 });

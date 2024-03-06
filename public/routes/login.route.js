@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 router.post("/", passport.authenticate('local', { 
     successRedirect: "/home",
     failureRedirect: "/login",
-    failureMessage: "Incorrect email/password combination"
+    failureFlash: true
  }));
 
 router.post("/old", (req, res) => {

@@ -8,7 +8,7 @@
         <form id="form" action="login" method="post">
             <fieldset>
                 <legend>Login</legend>
-                <span class="error"><%= locals.messages ? messages : "" %></span><br>
+                <span class="error"><%= locals.messages ? messages.error : "" %></span><br>
                 
                 <label for="email">E-mail:</label><br>
                 <input type="text" id="email" name="email" value=""><br><br>
