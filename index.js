@@ -50,7 +50,6 @@ app.all(["/*"], (req, res, next) => {
     const { cookie, ...sessionVars } = req.session;
     res.locals = sessionVars;
     res.locals.user = req.user;
-    //res.locals.messages = req.session.messages ? req.session.messages.slice(-1) : "";
 
     next();
 });

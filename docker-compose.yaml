@@ -1,0 +1,22 @@
+version: '1.0'
+
+services:
+  mysql:
+    container_name: webdev-db
+    platform: linux/x86_64
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TZ=America/Sao_Paulo
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    ports:
+      - $MYSQL_HOST_PORT:$MYSQL_DOCKER_PORT
+    expose:
+      - $MYSQL_HOST_PORT
+    volumes:
+      - db:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+volumes: 
+  db:
