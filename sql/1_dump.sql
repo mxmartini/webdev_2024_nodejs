@@ -21,6 +21,7 @@ CREATE TABLE guest (
     FOREIGN KEY (event_id) REFERENCES event (id)
 );
 
-INSERT INTO event (name) values ('DEMO');
-INSERT INTO guest (name, event_id) values ('Max Martini', 1), ('Leonardo Hafner', 1), ('Camila Lins', 1), ('Sandro Macena', 1);
-UPDATE guest SET active = true WHERE id = 1;
+INSERT INTO event (name, date) values ('Pool Party', '2024-09-24'), ('Wedding Party', '2024-10-24'), ('Bday Party', '2024-11-24');
+INSERT INTO guest (name, event_id) values ('Max Martini', 1), ('Leonardo Hafner', 1), ('Camila Lins', 1), ('Sandro Macena', 1), ('Caio Almeida', 1);
+UPDATE event SET active = true WHERE id in (1,2);
+UPDATE guest SET active = true WHERE id in (1,2,3);

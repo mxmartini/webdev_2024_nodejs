@@ -1,52 +1,27 @@
 const router = require('express').Router();
 const { readFileSync, writeFileSync } = require('fs');
+const eventsController = require('../controllers/events.controller');
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
 
     try {
-        const data = readFileSync('./public/data/events.json', 'utf-8');
-        let events = JSON.parse(data);
         
-        if(req.query)
-            events = events.filter( e => { 
-                const { name, dateini, dateend, active } = req.query; 
-                if (name && !e.name.toLowerCase().includes(name.toLowerCase())) return false;
-                if (dateini && dateend && !(e.date >= dateini && e.date <= dateend)) return false;
-                if (dateini && !e.date >= dateini) return false;
-                if (dateend && !e.date <= dateend) return false;
-                if (typeof active !== 'undefined' && e.active !== (active?.toLowerCase?.() === 'true')) return false;
-                return true;
-            });
+        let events = await eventsController.findWhere(req.query);
         
         res.send(events);
     }
     catch(e) { res.status(500).send(e.message) }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 
-    let event = null;
+    try {   
+            
+        let event = await eventsController.create(req.body);
 
-    // VALIDACOES (A FAZER)
-    
-    const data = readFileSync('./public/data/events.json', 'utf-8');
-    let events = JSON.parse(data);
-
-    const { name, date, active } = req.body;
-    
-    event = { 
-        id: Math.max(...events.map(o => o.id)) +1, 
-        name, 
-        date, 
-        active: active !== undefined, 
-        user_id: req.session.user.id
-    };
-    events = [ ...events, event];
-    
-    let fileContent = JSON.stringify(events, null, 2);
-    writeFileSync('./public/data/events.json', fileContent);
-
-    res.send(event);
+        res.send(event);
+    }
+    catch(e) { res.status(500).send(e.message) }
 });
 
 router.put("/:encid", (req, res) => {

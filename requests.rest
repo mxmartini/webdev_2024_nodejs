@@ -1,11 +1,21 @@
-GET http://localhost:3001
+GET http://localhost:3001/events
+
+###   
+GET http://localhost:3001/events
 
 ###
+GET http://localhost:3001/events?active=ok
+ 
+###
+GET http://localhost:3001/events?name=Max&dateini=2024-06-21&dateend=2024-07-21&active=true
+ 
+###
 
-POST http://localhost:3001/guests
+POST http://localhost:3001/events
 Content-Type: application/json
-
+ 
 { 
-    "name" : "Max", 
-    "age" : "45" 
+    "name" : "Wedding Party", 
+    "date" : "2024-09-25",
+    "active" : "true"
 }
