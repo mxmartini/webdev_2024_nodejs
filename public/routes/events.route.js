@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
 
     try {   
-            
+        
         let event = await eventsController.create(req.body);
 
         res.send(event);

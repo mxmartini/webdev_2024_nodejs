@@ -13,6 +13,9 @@ export class FilterModel {
         this.inputs = this.#container.querySelectorAll("input:not([type=button]):not([type=submit]), select, textarea");
     }
     find(selector){
+        return this.#container.querySelector(selector);
+    }
+    input(selector){
         return this.inputs.querySelector(selector);
     }
     filter(options, callback){ 
@@ -225,13 +228,13 @@ export class FormModel {
         this.inputs = this.#form.querySelectorAll("input:not([type=button]):not([type=submit]), select, textarea");
     }
 
-    data() {
-        const formData = new FormData(this.#form); 
+    data(defs=null) {
+        const formData = new FormData(this.#form);
         const data = Array.from(formData.entries()).reduce((agg, [key, value]) => ({
             ...agg,
             [key]:value
         }), {});
-        return data;
+        return defs ? { ...defs, ...data } : data;
     }
 
     send(options){throw new Error("Not implemented. Must be overrided in a child class.") }
@@ -250,6 +253,9 @@ export class FormModel {
     }
 
     find(selector){
+        return this.#form.querySelector(selector);
+    }
+    input(selector){
         return this.inputs.querySelector(selector);
     }
 }
@@ -273,14 +279,14 @@ export class EventForm extends FormModel {
         const init = {
             method: method || "POST",
             ...otherOptions,
-            body: body || JSON.stringify(this.data())
+            body: body || JSON.stringify(this.data({ active : false }))
         }; 
         
         fetch(url, init)
         .then( (res)=> { if (!res.ok) return res.text().then((t) => { throw new Error(t); }); return res.json() })
         .then( (event) => callback?.(new SendEvent(this, event, undefined)))
         .catch( (err) => callback?.(new SendEvent(this, undefined, err)))
-
+        
         return init?.preventSubmit == false;
     }
 

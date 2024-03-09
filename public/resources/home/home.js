@@ -30,9 +30,9 @@ table.onEdit = ({ data : event }) => {
 
     modal.open();
 
-    form.find("#name").value = event.name;
-    form.find("#date").value = event.date;
-    form.find("#active").checked = event.active;
+    form.input("#name").value = event.name;
+    form.input("#date").value = event.date;
+    form.input("#active").checked = event.active;
 
     form.addSendEventTrigger(self, 'onsubmit', { url: `${form.options.url}/${btoa(event.id)}`, method: "PUT" }, FormState.onUpdated);
 }
@@ -64,6 +64,6 @@ class FormState {
             form.clear();
             modal.close();
         }
-        else console.warn(error);
+        else form.find(".error").innerText = error.message;
     }
 }

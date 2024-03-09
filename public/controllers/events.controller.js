@@ -30,10 +30,10 @@ const eventsController = {
         try {
 
             z.object({ 
-                name: "string",
-                dateini: "date",
-                dateend: "date",
-                active: "boolean"
+                name: "string?",
+                dateini: "date?",
+                dateend: "date?",
+                active: "boolean?"
             });
 
             let filter = z.parse(query, { BOOLEAN_AS: "number" });
@@ -47,10 +47,8 @@ const eventsController = {
                 }
             }).join(" and ");
             
-            if(where) {
-                where = ` where ${where}`;
-                filter.name = `%${filter.name}%`
-            }
+            if(where) where = ` where ${where}`;
+            if(filter.name) filter.name = `%${filter.name}%`;    
             
             const [results, fields] = await mysql.query(
                 'SELECT * FROM webdev.event' + where, filter
